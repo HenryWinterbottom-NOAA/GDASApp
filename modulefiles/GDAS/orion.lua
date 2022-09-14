@@ -45,6 +45,9 @@ load("hpc/1.2.0")
 load("miniconda3/4.6.14")
 load("gdasapp/1.0.0")
 
+prepend_path("MODULEPATH", "/work2/noaa/da/cmartin/GDASApp/libs/modulefiles")
+load("sp/2.3.3")
+
 setenv("CC","mpiicc")
 setenv("FC","mpiifort")
 setenv("CXX","mpiicpc")

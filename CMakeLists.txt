@@ -51,7 +51,7 @@ if(BUILD_GDASBUNDLE)
 
 # turn off optional OOPS toy models
   option( ENABLE_LORENZ95_MODEL "Build LORENZ95 toy model" OFF )
-  option( ENABLE_QG_MODEL "Build QG toy model" OFF )
+  option( ENABLE_QG_MODEL "Build QG toy model" ON )
 
   ecbuild_bundle( PROJECT eckit GIT "https://github.com/ecmwf/eckit.git" TAG 1.16.0 )
   ecbuild_bundle( PROJECT fckit GIT "https://github.com/ecmwf/fckit.git" TAG 0.9.2 )

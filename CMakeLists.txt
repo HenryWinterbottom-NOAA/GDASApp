@@ -60,6 +60,9 @@ if(BUILD_GDASBUNDLE)
 # External (required) observation operators
   ecbuild_bundle( PROJECT crtm GIT "https://github.com/jcsda/crtm.git"   TAG v2.3-jedi.3 )
 
+# GSI background error library from GMAO
+  ecbuild_bundle( PROJECT gsibc GIT "https://github.com/GEOS-ESM/GSIbec.git" BRANCH develop UPDATE )
+
 # Core JEDI repositories
   ecbuild_bundle( PROJECT oops  GIT "https://github.com/jcsda/oops.git"  BRANCH develop UPDATE )
   ecbuild_bundle( PROJECT vader GIT "https://github.com/jcsda/vader.git" BRANCH develop UPDATE )

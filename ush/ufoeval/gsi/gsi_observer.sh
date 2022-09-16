@@ -509,6 +509,10 @@ if [[ "$rstprod" = "true" ]]; then
 fi
 
 date
+set +x
+module purge
+set -x
 echo "GSI observer script completed"
+cd $workdir
 echo "Submitting IODA converters script"
 sbatch $GDASApp/ush/ufoeval/gsi/iodaconv.sh $GDASApp $workdir $adate

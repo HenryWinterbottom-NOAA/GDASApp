@@ -1,10 +1,14 @@
 obs space:
   name: sfc
   obsdatain:
-    obsfile: sfc_obs_$(OBS_DATE).nc4
+    engine:
+      type: H5File
+      obsfile: sfc_obs_$(OBS_DATE).nc4
   obsdataout:
-    obsfile: sfc_diag_$(OBS_DATE).nc4
-  simulated variables: [surface_pressure, air_temperature, virtual_temperature]
+    engine:
+      type: H5File
+      obsfile: sfc_diag_$(OBS_DATE).nc4
+  simulated variables: [surface_pressure]
 geovals:
   filename: sfc_geoval_$(OBS_DATE).nc4
 vector ref: GsiHofXBc
@@ -16,3 +20,33 @@ obs operator:
   geovar_geomz: geopotential_height
 linear obs operator:
   name: Identity
+obs filters:
+- filter: Perform Action
+  filter variables:
+  - name: surface_pressure
+  action:
+    name: assign error
+    error parameter: 100.0     # 1.0 hPa
+- filter: Perform Action
+  filter variables:
+  - name: surface_pressure
+  action:
+    name: assign error
+    error function:
+      name: ObsErrorModelStepwiseLinear@ObsFunction
+      options:
+        xvar:
+          name: ObsValue/surface_pressure
+        xvals: [92000, 85000, 70000]
+        errors: [110, 120, 140]
+- filter: Perform Action
+  filter variables:
+  - name: surface_pressure
+  action:
+    name: inflate error
+    inflation variable:
+      name: ObsErrorFactorSfcPressure@ObsFunction
+      options:
+        geovar_geomz: geopotential_height
+        geovar_sfc_geomz: surface_geometric_height
+  defer to post: true

@@ -87,7 +87,7 @@ obs post filters:
     name: reject
   where:
   - variable: surface_pressure@PreQC
-   is_not_in: [3]
+    is_not_in: [3]
 - filter: Background Check
   filter variables:
   - name: surface_pressure

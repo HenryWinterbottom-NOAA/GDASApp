@@ -21,6 +21,21 @@ obs operator:
 linear obs operator:
   name: Identity
 obs pre filters:
+# Observation Range Sanity Check
+- filter: Bounds Check
+  filter variables:
+  - name: surface_pressure
+  minvalue: 37499
+  maxvalue: 106999
+  action:
+    name: reject
+# PrepBUFR check to be supplemented later
+- filter: RejectList
+  where:
+  - variable:
+      name: surface_pressure@PreQC
+    is_in: 4-15
+# error assignments
 - filter: Perform Action
   filter variables:
   - name: surface_pressure
@@ -51,7 +66,8 @@ obs pre filters:
           name: ObsValue/surface_pressure
         xvals: [85000, 80000]
         errors: [120, 140]
-obs post filters:
+obs prior filters:
+# error inflation based on Ps correction
 - filter: Perform Action
   filter variables:
   - name: surface_pressure
@@ -62,3 +78,22 @@ obs post filters:
       options:
         geovar_geomz: geopotential_height
         geovar_sfc_geomz: surface_geometric_height
+obs post filters:
+- filter: Background Check
+  filter variables:
+  - name: surface_pressure
+  threshold: 5.0
+  action:
+    name: reject
+  where:
+  - variable: surface_pressure@PreQC
+   is_not_in: [3]
+- filter: Background Check
+  filter variables:
+  - name: surface_pressure
+  threshold: 3.5
+  action:
+    name: reject
+  where:
+  - variable: surface_pressure@PreQC
+    is_in: [3]

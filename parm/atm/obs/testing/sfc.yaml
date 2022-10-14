@@ -20,16 +20,13 @@ obs operator:
   geovar_geomz: geopotential_height
 linear obs operator:
   name: Identity
-obs filters:
+obs pre filters:
 - filter: Perform Action
   filter variables:
   - name: surface_pressure
-  action:
-    name: assign error
-    error parameter: 100.0     # 1.0 hPa
-- filter: Perform Action
-  filter variables:
-  - name: surface_pressure
+  where:
+  - variable: surface_pressure@ObsType
+    is_in: [181]
   action:
     name: assign error
     error function:
@@ -37,8 +34,24 @@ obs filters:
       options:
         xvar:
           name: ObsValue/surface_pressure
-        xvals: [92000, 85000, 70000]
-        errors: [110, 120, 140]
+        xvals: [80000, 75000]
+        errors: [110, 120]
+- filter: Perform Action
+  filter variables:
+  - name: surface_pressure
+  where:
+  - variable: surface_pressure@ObsType
+    is_in: [187]
+  action:
+    name: assign error
+    error function:
+      name: ObsErrorModelStepwiseLinear@ObsFunction
+      options:
+        xvar:
+          name: ObsValue/surface_pressure
+        xvals: [85000, 80000]
+        errors: [120, 140]
+obs post filters:
 - filter: Perform Action
   filter variables:
   - name: surface_pressure
@@ -49,4 +62,3 @@ obs filters:
       options:
         geovar_geomz: geopotential_height
         geovar_sfc_geomz: surface_geometric_height
-  defer to post: true

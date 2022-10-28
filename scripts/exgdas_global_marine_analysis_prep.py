@@ -57,8 +57,8 @@ def gen_bkg_list(window_begin=' ', bkg_path='.', file_type='gdas.t*.ocnf00[4-9]'
             fix_diag_ch_jobs = []  # change att value
             fix_diag_d_jobs = []   # delete att
             for bkg in files:
-                fix_diag_ch_jobs.append('ncatted -a '+att+','+v+',o,d,9999.0 '+bkg)
-                fix_diag_d_jobs.append('ncatted -a '+att+','+v+',d,d,1.0 '+bkg)
+                fix_diag_ch_jobs.append('ncatted -h -a '+att+','+v+',o,d,9999.0 '+bkg)
+                fix_diag_d_jobs.append('ncatted -h -a '+att+','+v+',d,d,1.0 '+bkg)
 
             for c in fix_diag_ch_jobs:
                 logging.info(f"{c}")
@@ -240,9 +240,6 @@ ufsda.yamltools.genYAML(config, output=var_yaml, template=var_yaml_template)
 #           instead of a restart but we end up with NaN's after going through the "linear model".
 #           Check why ...
 bkg_rst = 'MOM.res.'+window_begin.strftime('%Y-%m-%d-%H-%M-%S')+'.nc'
-if not os.path.isfile(os.path.join(stage_cfg['background_dir'], 'RESTART', bkg_rst)):
-    # TODO (G): A bit dangerous, assert that date of MOM.res.nc is correct
-    bkg_rst = 'MOM.res.nc'
 ufsda.disk_utils.symlink(os.path.join(stage_cfg['background_dir'], 'RESTART', bkg_rst),
                          os.path.join(comout, 'analysis', 'INPUT', 'MOM.res.nc'))
 # TODO (G): Doing what's below should alaways work, but currently segfaulting ...
